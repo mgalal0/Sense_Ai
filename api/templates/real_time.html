@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Video Emotion Analysis API Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            padding-top: 20px;
+            padding-bottom: 50px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #4a6bdf 0%, #57b5f9 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 10px 10px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            margin-bottom: 25px;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #fff;
+            border-bottom: 2px solid #f0f0f0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        .card-body {
+            padding: 25px;
+        }
+        .api-endpoint {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4a6bdf;
+        }
+        .method {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 10px;
+            color: white;
+        }
+        .post {
+            background-color: #2196f3;
+        }
+        .get {
+            background-color: #4caf50;
+        }
+        .endpoint-url {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 14px;
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .parameters {
+            margin-top: 15px;
+        }
+        .parameter {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .parameter:last-child {
+            border-bottom: none;
+        }
+        .parameter-name {
+            font-weight: 600;
+            color: #555;
+            width: 120px;
+            display: inline-block;
+        }
+        .parameter-type {
+            font-size: 13px;
+            color: #666;
+            background-color: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .parameter-required {
+            font-size: 12px;
+            color: white;
+            background-color: #dc3545;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .parameter-optional {
+            font-size: 12px;
+            color: white;
+            background-color: #6c757d;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .response {
+            margin-top: 15px;
+        }
+        .response-code {
+            display: inline-block;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .code-200 {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .code-400 {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .json {
+            background-color: #272822;
+            color: #f8f8f2;
+            border-radius: 5px;
+            padding: 15px;
+            font-family: monospace;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+        .json .key {
+            color: #f92672;
+        }
+        .json .string {
+            color: #a6e22e;
+        }
+        .json .number {
+            color: #ae81ff;
+        }
+        .json .boolean {
+            color: #66d9ef;
+        }
+        pre {
+            margin: 0;
+        }
+        .code-example {
+            margin: 20px 0;
+        }
+        .code-snippet {
+            background-color: #272822;
+            color: #f8f8f2;
+            border-radius: 5px;
+            padding: 15px;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+        .section-title {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        .section-description {
+            margin-bottom: 20px;
+        }
+        .tab-content {
+            padding-top: 20px;
+        }
+        .nav-tabs .nav-link.active {
+            font-weight: 600;
+            border-color: #dee2e6 #dee2e6 #fff;
+            border-top: 3px solid #4a6bdf;
+        }
+        .note {
+            background-color: #e7f3fe;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .workflow-step {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #6c757d;
+        }
+        .workflow-step-number {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background-color: #6c757d;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1 class="text-center mb-3">Real-time Video Emotion Analysis API</h1>
+            <p class="text-center mb-0" style="max-width: 700px; margin: 0 auto;">Analyze human emotions in real-time video feeds from mobile devices</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h2>Overview</h2>
+                        <p>
+                            The Real-time Video Emotion Analysis API enables applications to analyze human emotions in real-time video frames. 
+                            This service can be easily integrated with mobile applications to detect emotions such as happiness, sadness, anger, surprise, and more directly from the device's camera.
+                        </p>
+                        
+                        <div class="note">
+                            <strong>Note:</strong> When using this API with mobile applications, you should follow this workflow:
+                            <br>1. Start a new analysis session
+                            <br>2. Repeatedly send video frames for analysis
+                            <br>3. End the session when finished
+                        </div>
+                    </div>
+                </div>
+                
+                <ul class="nav nav-tabs mt-4" id="apiTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="endpoints-tab" data-bs-toggle="tab" data-bs-target="#endpoints" type="button" role="tab" aria-controls="endpoints" aria-selected="true">API Endpoints</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="flutter-tab" data-bs-toggle="tab" data-bs-target="#flutter" type="button" role="tab" aria-controls="flutter" aria-selected="false">Flutter Integration</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="workflow-tab" data-bs-toggle="tab" data-bs-target="#workflow" type="button" role="tab" aria-controls="workflow" aria-selected="false">Integration Workflow</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="apiTabsContent">
+                    <!-- API Endpoints Tab -->
+                    <div class="tab-pane fade show active" id="endpoints" role="tabpanel" aria-labelledby="endpoints-tab">
+                        <h3 class="section-title">API Endpoints</h3>
+                        
+                        <!-- Start Session Endpoint -->
+                        <div class="api-endpoint">
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="method post">POST</span>
+                                <span class="endpoint-url">/api/realtime-video/start/</span>
+                            </div>
+                            
+                            <p><strong>Description:</strong> Start a new video analysis session</p>
+                            
+                            <div class="parameters">
+                                <h5>Parameters:</h5>
+                                <p>No parameters required. Send an empty POST request.</p>
+                            </div>
+                            
+                            <div class="response">
+                                <h5>Response:</h5>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="response-code code-200">200 OK</span>
+                                </div>
+                                <div class="json">
+<pre><span class="key">{
+    "message"</span>: <span class="string">"Session started successfully"</span>,
+    <span class="key">"session_data"</span>: {
+        <span class="key">"id"</span>: <span class="number">1</span>,
+        <span class="key">"session_id"</span>: <span class="string">"7289f5e8-9a4b-4c53-a9e7-d8901a8d6f9c"</span>,
+        <span class="key">"start_time"</span>: <span class="string">"2025-04-19T17:42:23.450Z"</span>,
+        <span class="key">"end_time"</span>: <span class="boolean">null</span>,
+        <span class="key">"is_active"</span>: <span class="boolean">true</span>,
+        <span class="key">"dominant_emotion"</span>: <span class="boolean">null</span>,
+        <span class="key">"emotion_percentages"</span>: {},
+        <span class="key">"total_frames"</span>: <span class="number">0</span>,
+        <span class="key">"frames"</span>: []
+    }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Process Frame Endpoint -->
+                        <div class="api-endpoint">
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="method post">POST</span>
+                                <span class="endpoint-url">/api/realtime-video/process/</span>
+                            </div>
+                            
+                            <p><strong>Description:</strong> Process a single video frame for emotion analysis</p>
+                            
+                            <div class="parameters">
+                                <h5>Parameters:</h5>
+                                <div class="parameter">
+                                    <span class="parameter-name">session_id</span>
+                                    <span class="parameter-type">string</span>
+                                    <span class="parameter-required">Required</span>
+                                    <p>The session ID returned from the start session endpoint</p>
+                                </div>
+                                <div class="parameter">
+                                    <span class="parameter-name">frame_number</span>
+                                    <span class="parameter-type">integer</span>
+                                    <span class="parameter-required">Required</span>
+                                    <p>The sequential number of the frame in the current session</p>
+                                </div>
+                                <div class="parameter">
+                                    <span class="parameter-name">frame_data</span>
+                                    <span class="parameter-type">string (base64)</span>
+                                    <span class="parameter-optional">Optional</span>
+                                    <p>The image frame encoded as a base64 string. Either this or 'image' must be provided.</p>
+                                </div>
+                                <div class="parameter">
+                                    <span class="parameter-name">image</span>
+                                    <span class="parameter-type">file</span>
+                                    <span class="parameter-optional">Optional</span>
+                                    <p>The image frame as a file upload. Either this or 'frame_data' must be provided.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="response">
+                                <h5>Response:</h5>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="response-code code-200">200 OK</span>
+                                </div>
+                                <div class="json">
+<pre><span class="key">{
+    "frame_number"</span>: <span class="number">1</span>,
+    <span class="key">"emotion"</span>: <span class="string">"Happy"</span>,
+    <span class="key">"confidence"</span>: <span class="number">0.87</span>,
+    <span class="key">"dominant_emotion"</span>: <span class="string">"Happy"</span>,
+    <span class="key">"emotion_percentages"</span>: {
+        <span class="key">"Happy"</span>: <span class="number">100.0</span>
+    }
+}</pre>
+                                </div>
+                                
+                                <div class="d-flex align-items-center mt-3 mb-2">
+                                    <span class="response-code code-400">400 Bad Request</span>
+                                </div>
+                                <div class="json">
+<pre><span class="key">{
+    "error"</span>: <span class="string">"Session ID is required"</span>
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- End Session Endpoint -->
+                        <div class="api-endpoint">
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="method post">POST</span>
+                                <span class="endpoint-url">/api/realtime-video/end/</span>
+                            </div>
+                            
+                            <p><strong>Description:</strong> End an active analysis session</p>
+                            
+                            <div class="parameters">
+                                <h5>Parameters:</h5>
+                                <div class="parameter">
+                                    <span class="parameter-name">session_id</span>
+                                    <span class="parameter-type">string</span>
+                                    <span class="parameter-required">Required</span>
+                                    <p>The session ID to end</p>
+                                </div>
+                            </div>
+                            
+                            <div class="response">
+                                <h5>Response:</h5>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="response-code code-200">200 OK</span>
+                                </div>
+                                <div class="json">
+<pre><span class="key">{
+    "message"</span>: <span class="string">"Session ended successfully"</span>,
+    <span class="key">"session_data"</span>: {
+        <span class="key">"id"</span>: <span class="number">1</span>,
+        <span class="key">"session_id"</span>: <span class="string">"7289f5e8-9a4b-4c53-a9e7-d8901a8d6f9c"</span>,
+        <span class="key">"start_time"</span>: <span class="string">"2025-04-19T17:42:23.450Z"</span>,
+        <span class="key">"end_time"</span>: <span class="string">"2025-04-19T17:45:10.122Z"</span>,
+        <span class="key">"is_active"</span>: <span class="boolean">false</span>,
+        <span class="key">"dominant_emotion"</span>: <span class="string">"Happy"</span>,
+        <span class="key">"emotion_percentages"</span>: {
+            <span class="key">"Happy"</span>: <span class="number">73.5</span>,
+            <span class="key">"Neutral"</span>: <span class="number">15.2</span>,
+            <span class="key">"Surprise"</span>: <span class="number">11.3</span>
+        },
+        <span class="key">"total_frames"</span>: <span class="number">62</span>,
+        <span class="key">"frames"</span>: [
+            {
+                <span class="key">"frame_number"</span>: <span class="number">0</span>,
+                <span class="key">"timestamp"</span>: <span class="string">"2025-04-19T17:42:24.120Z"</span>,
+                <span class="key">"emotion"</span>: <span class="string">"Happy"</span>,
+                <span class="key">"confidence"</span>: <span class="number">0.91</span>
+            },
+            <span class="string">// ... more frames</span>
+        ]
+    }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Get Session Statistics Endpoint -->
+                        <div class="api-endpoint">
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="method get">GET</span>
+                                <span class="endpoint-url">/api/realtime-video/statistics/{session_id}/</span>
+                            </div>
+                            
+                            <p><strong>Description:</strong> Get statistics for a specific session</p>
+                            
+                            <div class="parameters">
+                                <h5>Path Parameters:</h5>
+                                <div class="parameter">
+                                    <span class="parameter-name">session_id</span>
+                                    <span class="parameter-type">string</span>
+                                    <span class="parameter-required">Required</span>
+                                    <p>The session ID to retrieve statistics for</p>
+                                </div>
+                            </div>
+                            
+                            <div class="response">
+                                <h5>Response:</h5>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="response-code code-200">200 OK</span>
+                                </div>
+                                <div class="json">
+<pre><span class="key">{
+    "id"</span>: <span class="number">1</span>,
+    <span class="key">"session_id"</span>: <span class="string">"7289f5e8-9a4b-4c53-a9e7-d8901a8d6f9c"</span>,
+    <span class="key">"start_time"</span>: <span class="string">"2025-04-19T17:42:23.450Z"</span>,
+    <span class="key">"end_time"</span>: <span class="string">"2025-04-19T17:45:10.122Z"</span>,
+    <span class="key">"is_active"</span>: <span class="boolean">false</span>,
+    <span class="key">"dominant_emotion"</span>: <span class="string">"Happy"</span>,
+    <span class="key">"emotion_percentages"</span>: {
+        <span class="key">"Happy"</span>: <span class="number">73.5</span>,
+        <span class="key">"Neutral"</span>: <span class="number">15.2</span>,
+        <span class="key">"Surprise"</span>: <span class="number">11.3</span>
+    },
+    <span class="key">"total_frames"</span>: <span class="number">62</span>,
+    <span class="key">"frames"</span>: [
+        {
+            <span class="key">"frame_number"</span>: <span class="number">0</span>,
+            <span class="key">"timestamp"</span>: <span class="string">"2025-04-19T17:42:24.120Z"</span>,
+            <span class="key">"emotion"</span>: <span class="string">"Happy"</span>,
+            <span class="key">"confidence"</span>: <span class="number">0.91</span>
+        },
+        <span class="string">// ... more frames</span>
+    ]
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Flutter Integration Tab -->
+                    <div class="tab-pane fade" id="flutter" role="tabpanel" aria-labelledby="flutter-tab">
+                        <h3 class="section-title">Flutter Integration Guide</h3>
+                        
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h4>Prerequisites</h4>
+                                <ul>
+                                    <li>Flutter SDK installed (2.5.0 or higher)</li>
+                                    <li>Basic understanding of Flutter development</li>
+                                    <li>The following packages:
+                                        <ul>
+                                            <li><code>camera</code> - For accessing device camera</li>
+                                            <li><code>http</code> - For making API requests</li>
+                                            <li><code>path_provider</code> - For file handling</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mb-3">Step 1: Add Required Dependencies</h4>
+                        <p>Add the following dependencies to your <code>pubspec.yaml</code> file:</p>
+                        
+                        <div class="code-snippet mb-4">
+<pre>dependencies:
+  flutter:
+    sdk: flutter
+  camera: ^0.10.0
+  http: ^0.13.5
+  path_provider: ^2.0.11
+  image: ^3.2.0</pre>
+                        </div>
+                        
+                        <h4 class="mb-3">Step 2: Create Real-time Emotion Detection Service</h4>
+                        <p>Create a service class to handle API communication:</p>
+                        
+                        <div class="code-snippet mb-4">
+<pre>import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
+
+class EmotionAnalysisService {
+  // API base URL - update with your server address
+  final String baseUrl = 'https://your-server.com/api/realtime-video';
+  String? sessionId;
+  int frameNumber = 0;
+  
+  // Start a new analysis session
+  Future&lt;String?&gt; startSession() async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/start/'),
+        headers: {'Content-Type': 'application/json'},
+      );
+      
+      if (response.statusCode == 201) {
+        final data = json.decode(response.body);
+        sessionId = data['session_data']['session_id'];
+        frameNumber = 0;
+        return sessionId;
+      } else {
+        print('Failed to start session: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error starting session: $e');
+      return null;
+    }
+  }
+  
+  // Process a camera frame
+  Future&lt;Map&lt;String, dynamic&gt;?&gt; processFrame(File imageFile) async {
+    if (sessionId == null) {
+      print('No active session');
+      return null;
+    }
+    
+    try {
+      // Create multipart request
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$baseUrl/process/'),
+      );
+      
+      // Add session ID and frame number fields
+      request.fields['session_id'] = sessionId!;
+      request.fields['frame_number'] = frameNumber.toString();
+      
+      // Add the image file
+      request.files.add(await http.MultipartFile.fromPath(
+        'image',
+        imageFile.path,
+      ));
+      
+      // Send the request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      
+      // Increment frame number for next frame
+      frameNumber++;
+      
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        print('Failed to process frame: ${response.statusCode}');
+        print(response.body);
+        return null;
+      }
+    } catch (e) {
+      print('Error processing frame: $e');
+      return null;
+    }
+  }
+  
+  // Alternative method to process a frame using base64 encoding
+  Future&lt;Map&lt;String, dynamic&gt;?&gt; processFrameBase64(Uint8List imageBytes) async {
+    if (sessionId == null) {
+      print('No active session');
+      return null;
+    }
+    
+    try {
+      // Convert image bytes to base64
+      String base64Image = base64Encode(imageBytes);
+      
+      final response = await http.post(
+        Uri.parse('$baseUrl/process/'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'session_id': sessionId,
+          'frame_number': frameNumber,
+          'frame_data': base64Image,
+        }),
+      );
+      
+      // Increment frame number for next frame
+      frameNumber++;
+      
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        print('Failed to process frame: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error processing frame: $e');
+      return null;
+    }
+  }
+  
+  // End the current session
+  Future&lt;Map&lt;String, dynamic&gt;?&gt; endSession() async {
+    if (sessionId == null) {
+      print('No active session to end');
+      return null;
+    }
+    
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/end/'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'session_id': sessionId,
+        }),
+      );
+      
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        sessionId = null;
+        return data;
+      } else {
+        print('Failed to end session: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error ending session: $e');
+      return null;
+    }
+  }
+  
+  // Get statistics for a session
+  Future&lt;Map&lt;String, dynamic&gt;?&gt; getSessionStatistics(String sessionId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/statistics/$sessionId/'),
+      );
+      
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        print('Failed to get statistics: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error getting statistics: $e');
+      return null;
+    }
+  }
+}</pre>
+                        </div>
+                        
+                        <h4 class="mb-3">Step 3: Create Camera Screen</h4>
+                        <p>Create a screen to capture and analyze camera frames:</p>
+                        
+                        <div class="code-snippet mb-4">
+<pre>import 'dart:async';
+import 'dart:io';
+import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+
+class RealtimeEmotionDetectionScreen extends StatefulWidget {
+  @override
+  _RealtimeEmotionDetectionScreenState createState() => _RealtimeEmotionDetectionScreenState();
+}
+
+class _RealtimeEmotionDetectionScreenState extends State&lt;RealtimeEmotionDetectionScreen&gt; {
+  late CameraController _cameraController;
+  late List&lt;CameraDescription&gt; _cameras;
+  late EmotionAnalysisService _emotionService;
+  Timer? _frameTimer;
+  bool _isSessionActive = false;
+  String _currentEmotion = "Unknown";
+  double _confidence = 0.0;
+  Map&lt;String, double&gt; _emotionPercentages = {};
+  
+  @override
+  void initState() {
+    super.initState();
+    _emotionService = EmotionAnalysisService();
+    _initializeCamera();
+  }
+  
+  Future&lt;void&gt; _initializeCamera() async {
+    // Get available cameras
+    _cameras = await availableCameras();
+    
+    // Use front camera if available
+    CameraDescription camera = _cameras.firstWhere(
+      (camera) => camera.lensDirection == CameraLensDirection.front,
+      orElse: () => _cameras.first,
+    );
+    
+    // Initialize controller
+    _cameraController = CameraController(
+      camera,
+      ResolutionPreset.medium,
+      enableAudio: false,
+      imageFormatGroup: ImageFormatGroup.jpeg,
+    );
+    
+    try {
+      await _cameraController.initialize();
+      if (mounted) {
+        setState(() {});
+      }
+    } catch (e) {
+      print('Error initializing camera: $e');
+    }
+  }
+  
+  Future<void> _startSession() async {
+    final sessionId = await _emotionService.startSession();
+    if (sessionId != null) {
+      setState(() {
+        _isSessionActive = true;
+        _currentEmotion = "Starting...";
+        _confidence = 0.0;
+        _emotionPercentages = {};
+      });
+      
+      // Start capturing frames periodically
+      _frameTimer = Timer.periodic(Duration(milliseconds: 500), (timer) {
+        _captureAndAnalyzeFrame();
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to start session')),
+      );
+    }
+  }
+  
+  Future<void> _captureAndAnalyzeFrame() async {
+    if (!_cameraController.value.isInitialized || !_isSessionActive) {
+      return;
+    }
+    
+    try {
+      // Capture frame
+      final XFile imageFile = await _cameraController.takePicture();
+      
+      // Process the frame
+      final result = await _emotionService.processFrame(File(imageFile.path));
+      
+      if (result != null) {
+        setState(() {
+          _currentEmotion = result['emotion'] ?? "Unknown";
+          _confidence = (result['confidence'] ?? 0.0) * 100;
+          
+          if (result['emotion_percentages'] != null) {
+            _emotionPercentages = Map<String, double>.from(result['emotion_percentages']);
+          }
+        });
+      }
+    } catch (e) {
+      print('Error capturing frame: $e');
+    }
+  }
+  
+  Future<void> _endSession() async {
+    if (_frameTimer != null) {
+      _frameTimer!.cancel();
+      _frameTimer = null;
+    }
+    
+    final result = await _emotionService.endSession();
+    
+    setState(() {
+      _isSessionActive = false;
+    });
+    
+    if (result != null) {
+      // Show session results or navigate to results screen
+      _showSessionResults(result);
+    }
+  }
+  
+  void _showSessionResults(Map<String, dynamic> results) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Session Results'),
+        content: Container(
+          width: double.maxFinite,
+          height: 300,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Dominant emotion: ${results['session_data']['dominant_emotion'] ?? "Unknown"}'),
+              Text('Frames analyzed: ${results['session_data']['total_frames']}'),
+              SizedBox(height: 10),
+              Text('Emotion Distribution:', style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 5),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: results['session_data']['emotion_percentages']?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    String emotion = results['session_data']['emotion_percentages'].keys.elementAt(index);
+                    double percentage = results['session_data']['emotion_percentages'][emotion];
+                    return ListTile(
+                      dense: true,
+                      title: Text(emotion),
+                      trailing: Text('${percentage.toStringAsFixed(1)}%'),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            child: Text('Close'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  @override
+  void dispose() {
+    _frameTimer?.cancel();
+    _cameraController.dispose();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    if (!_cameraController.value.isInitialized) {
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Real-time Emotion Detection'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Stack(
+              children: [
+                // Camera preview
+                CameraPreview(_cameraController),
+                
+                // Emotion overlay
+                Positioned(
+                  top: 10,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    color: Colors.black54,
+                    child: Text(
+                      'Emotion: $_currentEmotion (${_confidence.toStringAsFixed(1)}%)',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          // Emotion percentages
+          Expanded(
+            flex: 2,
+            child: Container(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Emotion Distribution:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Expanded(
+                    child: _emotionPercentages.isEmpty
+                        ? Center(child: Text('No data available'))
+                        : ListView.builder(
+                            itemCount: _emotionPercentages.length,
+                            itemBuilder: (context, index) {
+                              String emotion = _emotionPercentages.keys.elementAt(index);
+                              double percentage = _emotionPercentages[emotion]!;
+                              return Padding(
+                                padding: EdgeInsets.symmetric(vertical: 4),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '$emotion:',
+                                      style: TextStyle(fontWeight: FontWeight.w500),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: LinearProgressIndicator(
+                                        value: percentage / 100,
+                                        backgroundColor: Colors.grey[200],
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text('${percentage.toStringAsFixed(1)}%'),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          
+          // Controls
+          Container(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: _isSessionActive ? null : _startSession,
+                  child: Text('Start Analysis'),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: _isSessionActive ? _endSession : null,
+                  child: Text('End Analysis'),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    backgroundColor: Colors.red,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+// To use this screen in your Flutter app:
+// 1. Add it to your app's routes
+// 2. Navigate to it when needed:
+//    Navigator.push(
+//      context,
+//      MaterialPageRoute(builder: (context) => RealtimeEmotionDetectionScreen()),
+//    );
+</div>
+                    
+<!-- Integration Workflow Tab -->
+<div class="tab-pane fade" id="workflow" role="tabpanel" aria-labelledby="workflow-tab">
+    <h3 class="section-title">Integration Workflow</h3>
+    <p class="section-description">
+        Follow these steps to integrate real-time emotion analysis into your mobile application.
+    </p>
+    
+    <div class="workflow-step">
+        <span class="workflow-step-number">1</span>
+        <strong>Initialization</strong>
+        <p>Set up the camera in your mobile application and prepare for real-time frame processing.</p>
+    </div>
+    
+    <div class="workflow-step">
+        <span class="workflow-step-number">2</span>
+        <strong>Start a Session</strong>
+        <p>When the user initiates the emotion analysis feature, start a new session by calling the <code>/api/realtime-video/start/</code> endpoint. Store the returned <code>session_id</code> for subsequent requests.</p>
+    </div>
+    
+    <div class="workflow-step">
+        <span class="workflow-step-number">3</span>
+        <strong>Process Frames</strong>
+        <p>Continuously capture frames from the device's camera and send them to the <code>/api/realtime-video/process/</code> endpoint. We recommend processing 1-2 frames per second for optimal performance.</p>
+    </div>
+    
+    <div class="workflow-step">
+        <span class="workflow-step-number">4</span>
+        <strong>Update UI</strong>
+        <p>Use the emotion data returned from each frame to update your application's UI in real-time, showing the current detected emotion and confidence level.</p>
+    </div>
+    
+    <div class="workflow-step">
+        <span class="workflow-step-number">5</span>
+        <strong>End the Session</strong>
+        <p>When the user exits the feature or after a certain period, end the session by calling the <code>/api/realtime-video/end/</code> endpoint with the <code>session_id</code>.</p>
+    </div>
+    
+    <div class="workflow-step">
+        <span class="workflow-step-number">6</span>
+        <strong>Display Results</strong>
+        <p>Use the session statistics returned from the end session response to show a summary of emotions detected during the session.</p>
+    </div>
+    
+    <div class="note mt-4">
+        <strong>Performance Tip:</strong> To ensure smooth performance on mobile devices, consider these recommendations:
+        <ul class="mt-2 mb-0">
+            <li>Use a lower camera resolution (e.g., 640x480) to reduce processing time</li>
+            <li>Process frames at intervals (e.g., every 500ms) rather than every frame</li>
+            <li>Use base64 encoding for frames if file uploads are slow</li>
+            <li>Consider implementing client-side buffering if network conditions are unreliable</li>
+        </ul>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+<footer class="mt-5 text-center">
+<p>&copy; Graduation Project 2025 - All Rights Reserved</p>
+</footer>
+</div>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Enable Bootstrap tabs functionality
+document.addEventListener('DOMContentLoaded', function() {
+const triggerTabList = [].slice.call(document.querySelectorAll('#apiTabs button'));
+triggerTabList.forEach(function(triggerEl) {
+const tabTrigger = new bootstrap.Tab(triggerEl);
+triggerEl.addEventListener('click', function(event) {
+event.preventDefault();
+tabTrigger.show();
+});
+});
+});
+</script>
+</body>
+</html>
